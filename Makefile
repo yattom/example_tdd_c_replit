@@ -1,8 +1,11 @@
 CC = clang
-override CFLAGS += -g -Wno-everything -pthread -lm
+override CFLAGS += -g -Wno-everything -pthread -lm -I googletest-release-1.11.0/googletest -I googletest-release-1.11.0/googletest/include -lstdc++
 
-SRCS = $(shell find . -name '.ccls-cache' -type d -prune -o -type f -name '*.c' -print)
-OBJS = $(patsubst %.c, %.o, $(SRCS))
+COMPILE.c = $(CC) $(CFLAGS) -c
+COMPILE.cc = $(CC) $(CFLAGS) -c
+
+SRCS = googletest-release-1.11.0/googletest/src/gtest-all.cc googletest-release-1.11.0/googletest/src/gtest_main.cc $(shell find . -name '.ccls-cache' -type d -prune -o -type f -name '*.c' -print)
+OBJS = $(shell echo $(SRCS) | sed 's/\.\(c\|cc\)/.o/g')
 
 main: $(OBJS)
 	$(CC) $(CFLAGS) $(OBJS) -o main
